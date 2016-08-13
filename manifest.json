@@ -1,0 +1,24 @@
+{
+  "name": "Extended GitHub News Feed",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Displays descriptions and numbers of stars for repositories in the GitHub News Feed",
+  "homepage_url": "https://github.com/alferov/github-extended-newsfeed",
+  "author": "Philipp Alferov",
+  "permissions": [
+    "http://github.com/*",
+    "https://github.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://github.com/*",
+        "https://github.com/*"
+      ],
+      "js": [
+        "src/inject.js"
+      ],
+      "run_at": "document_end"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "github-extended-newsfeed",
+  "version": "0.0.1",
+  "description": "Chrome extension that displays descriptions and numbers of stars for repositories in the GitHub News Feed",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Philipp Alferov <philipp.alferov@gmail.com>",
+  "license": "MIT"
+}
