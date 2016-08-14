@@ -4,8 +4,11 @@
   "description": "Chrome extension that displays descriptions and numbers of stars for repositories in the GitHub News Feed",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack"
   },
   "author": "Philipp Alferov <philipp.alferov@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^1.13.1"
+  }
 }

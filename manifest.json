@@ -16,7 +16,7 @@
         "https://github.com/*"
       ],
       "js": [
-        "src/inject.js"
+        "dist/index.js"
       ],
       "run_at": "document_end"
     }
