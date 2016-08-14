@@ -4,7 +4,8 @@
   "description": "Chrome extension that displays descriptions and numbers of stars for repositories in the GitHub News Feed",
   "main": "dist/index.js",
   "scripts": {
-    "start": "webpack"
+    "start": "webpack",
+    "dev": "npm start -- --watch"
   },
   "author": "Philipp Alferov <philipp.alferov@gmail.com>",
   "license": "MIT",
