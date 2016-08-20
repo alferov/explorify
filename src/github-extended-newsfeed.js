@@ -1,55 +1,44 @@
 /* global fetch */
+let dashboard = document.getElementById('dashboard')
+let cache = {}
 
-var dashboard = document.getElementById('dashboard')
-
-// Get all newsfeed item containers
-var feedItems = document.getElementsByClassName('alert')
-const API = 'https://api.github.com/repos/'
-
-const itemReducer = (acc, node) => {
-  const titleNode = node.querySelector('.title')
-  const urlNodes = titleNode.getElementsByTagName('a')
-  const url = API + urlNodes[urlNodes.length - 1].innerText
-  acc[url] = { node }
-  return acc
+// Get all newsfeed DOM nodes
+const getFeedItems = (startingFrom) => {
+  const allowed = ['.watch_started', '.create', '.fork']
+  return document.querySelectorAll(...allowed)
 }
 
-const responseReducer = (acc, meta) => {
-  let { url, description } = meta
-  let cashedUrl = acc[url]
-  if (!cashedUrl) return
-  let { node } = cashedUrl
-  let div = document.createElement('div');
-  div.textContent = description
-  console.log(div)
-  node.appendChild(div)
-  cashedUrl = Object.assign(cashedUrl, { meta })
-
-  return acc
+// Get user/repo pairs from the DOM nodes
+const mapNodes = (node) => {
+  return node.querySelector('.title').lastElementChild.innerText
 }
 
-const getRepoDetails = (url) => {
+// Grab repo details from API and update the cache if needed
+const getRepoDetails = (userRepo, cache) => {
+  const API = 'https://api.github.com/repos/'
+
   return new Promise((resolve, reject) => {
-    const onSuccess = response => resolve(response.json())
-    fetch(url).then(onSuccess, reject)
+    if (cache[userRepo]) {
+      resolve(cache[userRepo])
+      return
+    }
+
+    fetch(API + userRepo)
+      .then(result => result.json())
+      .then(json => cache[userRepo] = json)
+      .then(resolve)
+      .catch(reject)
   })
 }
 
-const updateDOM = (node, respond) => {
+const extend = () => {
+  const nodes = Array.from(getFeedItems())
+  const repositories = new Set(nodes.map(mapNodes))
 
+  Promise
+    .all([...repositories].map(userRepo => getRepoDetails(userRepo, cache)))
+    .then((result) => {})
+    .catch(console.error)
 }
 
-// Generate a normalized object, where keys are github repo urls mentioned
-// in the newsfeed and values are references to DOM nodes that will be extended
-const normalizedUrls = Array.prototype.reduce.call(feedItems, itemReducer, {})
-// Get all repository URLs
-const userRepoUrls = Object.keys(normalizedUrls)
-const promises = userRepoUrls.map(getRepoDetails)
-
-Promise.all(promises).then((responses) => {
-  const normalizedResponses = responses.reduce(
-    responseReducer,
-    Object.assign({}, normalizedUrls)
-  )
-  console.log(normalizedResponses)
-})
+extend()
