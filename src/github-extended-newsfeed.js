@@ -13,32 +13,39 @@ const mapNodes = (node) => {
   return node.querySelector('.title').lastElementChild.innerText
 }
 
-// Grab repo details from API and update the cache if needed
-const getRepoDetails = (userRepo, cache) => {
-  const API = 'https://api.github.com/repos/'
-
-  return new Promise((resolve, reject) => {
-    if (cache[userRepo]) {
-      resolve(cache[userRepo])
-      return
-    }
-
-    fetch(API + userRepo)
-      .then(result => result.json())
-      .then(json => cache[userRepo] = json)
-      .then(resolve)
-      .catch(reject)
-  })
+const getRepo = async (userRepo) => {
+  const API = 'https://api.github.com/repos'
+  try {
+    const response = await fetch(API + userRepo)
+    if (403 === response.status) throw new Error('Unauthorized')
+    return await response.json()
+  } catch (err) {
+    console.error(err)
+  }
 }
 
-const extend = () => {
+const getRepos = async (repositories, cache) => {
+  // Run async requests in parallel
+  return Promise.all([...repositories].map(async (userRepo) => {
+    const cashedValue = cache[userRepo]
+    return cashedValue ? cashedValue : await getRepo(userRepo, cache)
+  }))
+}
+
+// Transform an array of data to an object: { userRepo: dataFromAPI }
+const normalizeResponses = (responses) => {
+  return responses.reduce((prev, curr)=> {
+    if (!curr) return prev
+    const { full_name } = curr
+    prev[full_name] = curr
+    return curr
+  }, {})
+}
+
+const extend = async () => {
   const nodes = Array.from(getFeedItems())
   const repositories = new Set(nodes.map(mapNodes))
-
-  Promise
-    .all([...repositories].map(userRepo => getRepoDetails(userRepo, cache)))
-    .then((result) => {})
-    .catch(console.error)
+  const result = await getRepos(repositories, cache)
 }
 
 extend()
