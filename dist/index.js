@@ -54,25 +54,21 @@
 
 	var _set2 = _interopRequireDefault(_set);
 
-	var _from = __webpack_require__(78);
-
-	var _from2 = _interopRequireDefault(_from);
-
-	var _toConsumableArray2 = __webpack_require__(83);
-
-	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
-	var _promise = __webpack_require__(84);
+	var _promise = __webpack_require__(83);
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _regenerator = __webpack_require__(91);
+	var _regenerator = __webpack_require__(90);
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
 
-	var _asyncToGenerator2 = __webpack_require__(95);
+	var _asyncToGenerator2 = __webpack_require__(94);
 
 	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+	var _toConsumableArray2 = __webpack_require__(95);
+
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
 	var _doubleEndedQueue = __webpack_require__(96);
 
@@ -85,17 +81,39 @@
 	var cache = {};
 	var lastUpdated = null;
 
-	// Get all newsfeed DOM nodes
+	var nextSiblings = function nextSiblings(el, predicate) {
+	  var result = [];
+	  if (!el) return;
+	  while (el = el.nextElementSibling) {
+	    if (!predicate(el)) continue;
+	    result.push(el);
+	  }
+	  return result;
+	};
+
+	// Get all newsfeed DOM elements
 	var getFeedItems = function getFeedItems(startingFrom) {
 	  var _document;
 
-	  var allowed = ['.watch_started', '.create', '.fork'];
-	  return (_document = document).querySelectorAll.apply(_document, allowed);
+	  var allowed = ['watch_started', 'create', 'fork'];
+
+	  var predicate = function predicate(el) {
+	    return allowed.some(function (i) {
+	      return el.classList.contains(i);
+	    });
+	  };
+	  // If startingFrom is defined, function will look for the immediately
+	  // following sibling of this element
+	  var firstMatchedEl = startingFrom ? startingFrom : (_document = document).querySelector.apply(_document, (0, _toConsumableArray3.default)(allowed.map(function (i) {
+	    return '.' + i;
+	  })));
+
+	  return [firstMatchedEl].concat((0, _toConsumableArray3.default)(nextSiblings(firstMatchedEl, predicate)));
 	};
 
 	// Get user/repo pairs from the DOM nodes
-	var getUserRepo = function getUserRepo(node) {
-	  return node.querySelector('.title').lastElementChild.innerText;
+	var getUserRepo = function getUserRepo(el) {
+	  return el.querySelector('.title').lastElementChild.innerText;
 	};
 
 	var getRepo = function () {
@@ -232,7 +250,7 @@
 	        switch (_context4.prev = _context4.next) {
 	          case 0:
 	            // Cache DOM nodes
-	            nodes = (0, _from2.default)(getFeedItems());
+	            nodes = getFeedItems(lastUpdated);
 	            // Initialize a Set of unique user/repo pairs
 
 	            repositories = new _set2.default(nodes.map(getUserRepo));
@@ -1823,46 +1841,20 @@
 /* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-
-	exports.__esModule = true;
-
-	var _from = __webpack_require__(78);
-
-	var _from2 = _interopRequireDefault(_from);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = function (arr) {
-	  if (Array.isArray(arr)) {
-	    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-	      arr2[i] = arr[i];
-	    }
-
-	    return arr2;
-	  } else {
-	    return (0, _from2.default)(arr);
-	  }
-	};
+	module.exports = { "default": __webpack_require__(84), __esModule: true };
 
 /***/ },
 /* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(85), __esModule: true };
-
-/***/ },
-/* 85 */
-/***/ function(module, exports, __webpack_require__) {
-
 	__webpack_require__(41);
 	__webpack_require__(42);
 	__webpack_require__(55);
-	__webpack_require__(86);
+	__webpack_require__(85);
 	module.exports = __webpack_require__(7).Promise;
 
 /***/ },
-/* 86 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1875,9 +1867,9 @@
 	  , aFunction          = __webpack_require__(9)
 	  , anInstance         = __webpack_require__(62)
 	  , forOf              = __webpack_require__(63)
-	  , speciesConstructor = __webpack_require__(87)
-	  , task               = __webpack_require__(88).set
-	  , microtask          = __webpack_require__(90)()
+	  , speciesConstructor = __webpack_require__(86)
+	  , task               = __webpack_require__(87).set
+	  , microtask          = __webpack_require__(89)()
 	  , PROMISE            = 'Promise'
 	  , TypeError          = global.TypeError
 	  , process            = global.process
@@ -2166,7 +2158,7 @@
 	});
 
 /***/ },
-/* 87 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.3.20 SpeciesConstructor(O, defaultConstructor)
@@ -2179,11 +2171,11 @@
 	};
 
 /***/ },
-/* 88 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ctx                = __webpack_require__(8)
-	  , invoke             = __webpack_require__(89)
+	  , invoke             = __webpack_require__(88)
 	  , html               = __webpack_require__(51)
 	  , cel                = __webpack_require__(17)
 	  , global             = __webpack_require__(6)
@@ -2259,7 +2251,7 @@
 	};
 
 /***/ },
-/* 89 */
+/* 88 */
 /***/ function(module, exports) {
 
 	// fast apply, http://jsperf.lnkit.com/fast-apply/5
@@ -2280,11 +2272,11 @@
 	};
 
 /***/ },
-/* 90 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var global    = __webpack_require__(6)
-	  , macrotask = __webpack_require__(88).set
+	  , macrotask = __webpack_require__(87).set
 	  , Observer  = global.MutationObserver || global.WebKitMutationObserver
 	  , process   = global.process
 	  , Promise   = global.Promise
@@ -2353,14 +2345,14 @@
 	};
 
 /***/ },
-/* 91 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(92);
+	module.exports = __webpack_require__(91);
 
 
 /***/ },
-/* 92 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {// This method of obtaining a reference to the global object needs to be
@@ -2381,7 +2373,7 @@
 	// Force reevalutation of runtime.js.
 	g.regeneratorRuntime = undefined;
 
-	module.exports = __webpack_require__(93);
+	module.exports = __webpack_require__(92);
 
 	if (hadRuntime) {
 	  // Restore the original runtime.
@@ -2398,7 +2390,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 93 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {/**
@@ -3070,10 +3062,10 @@
 	  typeof self === "object" ? self : this
 	);
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(94)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(93)))
 
 /***/ },
-/* 94 */
+/* 93 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -3239,14 +3231,14 @@
 
 
 /***/ },
-/* 95 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _promise = __webpack_require__(84);
+	var _promise = __webpack_require__(83);
 
 	var _promise2 = _interopRequireDefault(_promise);
 
@@ -3279,6 +3271,32 @@
 	      return step("next");
 	    });
 	  };
+	};
+
+/***/ },
+/* 95 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	exports.__esModule = true;
+
+	var _from = __webpack_require__(78);
+
+	var _from2 = _interopRequireDefault(_from);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (arr) {
+	  if (Array.isArray(arr)) {
+	    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+	      arr2[i] = arr[i];
+	    }
+
+	    return arr2;
+	  } else {
+	    return (0, _from2.default)(arr);
+	  }
 	};
 
 /***/ },

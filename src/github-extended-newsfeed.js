@@ -4,15 +4,33 @@ let dashboard = document.getElementById('dashboard')
 let cache = {}
 let lastUpdated = null
 
-// Get all newsfeed DOM nodes
+const nextSiblings = (el, predicate) => {
+  var result = []
+  if (!el) return
+  while (el = el.nextElementSibling) {
+    if (!predicate(el)) continue
+    result.push(el)
+  }
+  return result
+}
+
+// Get all newsfeed DOM elements
 const getFeedItems = (startingFrom) => {
-  const allowed = ['.watch_started', '.create', '.fork']
-  return document.querySelectorAll(...allowed)
+  const allowed = ['watch_started', 'create', 'fork']
+
+  const predicate = (el) => allowed.some((i) => el.classList.contains(i))
+  // If startingFrom is defined, function will look for the immediately
+  // following sibling of this element
+  const firstMatchedEl = startingFrom
+    ? startingFrom
+    : document.querySelector(...allowed.map((i) => `.${i}`))
+
+  return [firstMatchedEl, ...nextSiblings(firstMatchedEl, predicate)]
 }
 
 // Get user/repo pairs from the DOM nodes
-const getUserRepo = (node) => {
-  return node.querySelector('.title').lastElementChild.innerText
+const getUserRepo = (el) => {
+  return el.querySelector('.title').lastElementChild.innerText
 }
 
 const getRepo = async (userRepo) => {
@@ -53,7 +71,7 @@ const updateNode = (node, data) => {
 
 const extend = async () => {
   // Cache DOM nodes
-  const nodes = Array.from(getFeedItems())
+  const nodes = getFeedItems(lastUpdated)
   // Initialize a Set of unique user/repo pairs
   const repositories = new Set(nodes.map(getUserRepo))
   const data = await getRepos(repositories, cache)
@@ -66,7 +84,6 @@ const extend = async () => {
     const userRepo = getUserRepo(node)
     updateNode(node, cache[userRepo])
   }
-
 }
 
 extend()
