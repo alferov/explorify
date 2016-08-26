@@ -38,6 +38,7 @@ const getRepo = async (userRepo) => {
   try {
     const response = await fetch(API + userRepo)
     if (403 === response.status) throw new Error('Unauthorized')
+    if (404 === response.status) throw new Error(`${userRepo} is not found`)
     return await response.json()
   } catch (err) {
     console.error(err)
@@ -85,5 +86,10 @@ const extend = async () => {
     updateNode(node, cache[userRepo])
   }
 }
+
+dashboard
+  .addEventListener('submit', () => {
+    setTimeout(extend, 500)
+  })
 
 extend()

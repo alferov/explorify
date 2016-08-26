@@ -139,24 +139,32 @@
 	            throw new Error('Unauthorized');
 
 	          case 7:
-	            _context.next = 9;
-	            return response.json();
+	            if (!(404 === response.status)) {
+	              _context.next = 9;
+	              break;
+	            }
+
+	            throw new Error(userRepo + ' is not found');
 
 	          case 9:
+	            _context.next = 11;
+	            return response.json();
+
+	          case 11:
 	            return _context.abrupt('return', _context.sent);
 
-	          case 12:
-	            _context.prev = 12;
+	          case 14:
+	            _context.prev = 14;
 	            _context.t0 = _context['catch'](1);
 
 	            console.error(_context.t0);
 
-	          case 15:
+	          case 17:
 	          case 'end':
 	            return _context.stop();
 	        }
 	      }
-	    }, _callee, undefined, [[1, 12]]);
+	    }, _callee, undefined, [[1, 14]]);
 	  }));
 
 	  return function getRepo(_x) {
@@ -284,6 +292,10 @@
 	    return _ref4.apply(this, arguments);
 	  };
 	}();
+
+	dashboard.addEventListener('submit', function () {
+	  setTimeout(extend, 500);
+	});
 
 	extend();
 
