@@ -1,8 +1,8 @@
 module.exports = {
-  entry: __dirname + '/src/github-extended-newsfeed.js',
+  entry: __dirname + '/src/index.js',
   output: {
     path: __dirname + '/dist',
-    filename: 'index.js'
+    filename: 'github-showcasify.js'
   },
   module: {
     loaders: [{

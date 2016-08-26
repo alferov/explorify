@@ -1,9 +1,9 @@
 {
-  "name": "Extended GitHub News Feed",
-  "version": "0.0.1",
+  "name": "Github Showcasify",
+  "version": "1.0.0",
   "manifest_version": 2,
-  "description": "Displays descriptions and numbers of stars for repositories in the GitHub News Feed",
-  "homepage_url": "https://github.com/alferov/github-extended-newsfeed",
+  "description": "Adds the description and the number of stars to starred repositories in the GitHub News Feed",
+  "homepage_url": "https://github.com/alferov/github-showcasify",
   "author": "Philipp Alferov",
   "permissions": [
     "http://github.com/*",
@@ -16,7 +16,7 @@
         "https://github.com/*"
       ],
       "js": [
-        "dist/index.js"
+        "dist/github-showcasify.js"
       ],
       "run_at": "document_end"
     }

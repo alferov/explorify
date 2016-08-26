@@ -1,7 +1,7 @@
 {
-  "name": "github-extended-newsfeed",
-  "version": "0.0.1",
-  "description": "Chrome extension that displays descriptions and numbers of stars for repositories in the GitHub News Feed",
+  "name": "github-showcasify",
+  "version": "1.0.0",
+  "description": "A Chrome extension that adds the description and the number of stars to starred repositories in the GitHub News Feed",
   "main": "dist/index.js",
   "scripts": {
     "start": "webpack",

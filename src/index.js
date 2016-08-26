@@ -1,8 +1,6 @@
-/* global fetch */
 import Deque from 'double-ended-queue'
 import { getRepo, getRepos } from './api'
 import { getUserRepo, getFeedItems, updateNode } from './dom'
-
 const dashboard = document.getElementById('dashboard')
 let cache = {}
 let lastUpdated = null
@@ -35,9 +33,14 @@ async function inject () {
   }
 }
 
-dashboard
-  .addEventListener('submit', () => {
-    setTimeout(inject, 500)
-  })
+function addEventListeners (target) {
+  if (!target) return
+  target
+    .addEventListener('submit', () => {
+      setTimeout(inject, 500)
+    })
 
-inject()
+  inject()
+}
+
+addEventListeners(dashboard)

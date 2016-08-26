@@ -1,5 +1,5 @@
-# Extended GitHub News Feed
-> Displays descriptions and numbers of stars for repositories in the GitHub News Feed
+# github-showcasify
+> A Chrome extension that adds the description and the number of stars to starred repositories in the GitHub News Feed
 
 ## Installation
 
