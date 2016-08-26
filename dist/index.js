@@ -82,8 +82,8 @@
 	var lastUpdated = null;
 
 	var nextSiblings = function nextSiblings(el, predicate) {
+	  if (!el) throw new TypeError('Element must be defined');
 	  var result = [];
-	  if (!el) return;
 	  while (el = el.nextElementSibling) {
 	    if (!predicate(el)) continue;
 	    result.push(el);
@@ -113,6 +113,7 @@
 
 	// Get user/repo pairs from the DOM nodes
 	var getUserRepo = function getUserRepo(el) {
+	  if (!el) return;
 	  return el.querySelector('.title').lastElementChild.innerText;
 	};
 
@@ -259,13 +260,21 @@
 	          case 0:
 	            // Cache DOM nodes
 	            nodes = getFeedItems(lastUpdated);
-	            // Initialize a Set of unique user/repo pairs
 
+	            if (nodes.length) {
+	              _context4.next = 3;
+	              break;
+	            }
+
+	            return _context4.abrupt('return');
+
+	          case 3:
+	            // Initialize a Set of unique user/repo pairs
 	            repositories = new _set2.default(nodes.map(getUserRepo));
-	            _context4.next = 4;
+	            _context4.next = 6;
 	            return getRepos(repositories, cache);
 
-	          case 4:
+	          case 6:
 	            data = _context4.sent;
 
 	            cache = (0, _extends3.default)({}, cache, normalizeResponse(data));
@@ -280,7 +289,7 @@
 	              updateNode(node, cache[userRepo]);
 	            }
 
-	          case 8:
+	          case 10:
 	          case 'end':
 	            return _context4.stop();
 	        }

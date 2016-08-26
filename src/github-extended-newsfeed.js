@@ -1,12 +1,12 @@
 /* global fetch */
 import Deque from 'double-ended-queue'
-let dashboard = document.getElementById('dashboard')
+const dashboard = document.getElementById('dashboard')
 let cache = {}
 let lastUpdated = null
 
 const nextSiblings = (el, predicate) => {
-  var result = []
-  if (!el) return
+  if (!el) throw new TypeError('Element must be defined')
+  const result = []
   while (el = el.nextElementSibling) {
     if (!predicate(el)) continue
     result.push(el)
@@ -30,6 +30,7 @@ const getFeedItems = (startingFrom) => {
 
 // Get user/repo pairs from the DOM nodes
 const getUserRepo = (el) => {
+  if (!el) return
   return el.querySelector('.title').lastElementChild.innerText
 }
 
@@ -73,6 +74,7 @@ const updateNode = (node, data) => {
 const extend = async () => {
   // Cache DOM nodes
   const nodes = getFeedItems(lastUpdated)
+  if (!nodes.length) return
   // Initialize a Set of unique user/repo pairs
   const repositories = new Set(nodes.map(getUserRepo))
   const data = await getRepos(repositories, cache)
