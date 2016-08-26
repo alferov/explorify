@@ -46,6 +46,10 @@
 
 	'use strict';
 
+	var _regenerator = __webpack_require__(90);
+
+	var _regenerator2 = _interopRequireDefault(_regenerator);
+
 	var _extends2 = __webpack_require__(1);
 
 	var _extends3 = _interopRequireDefault(_extends2);
@@ -54,228 +58,35 @@
 
 	var _set2 = _interopRequireDefault(_set);
 
-	var _promise = __webpack_require__(83);
-
-	var _promise2 = _interopRequireDefault(_promise);
-
-	var _regenerator = __webpack_require__(90);
-
-	var _regenerator2 = _interopRequireDefault(_regenerator);
-
 	var _asyncToGenerator2 = __webpack_require__(94);
 
 	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-	var _toConsumableArray2 = __webpack_require__(95);
-
-	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
-	var _doubleEndedQueue = __webpack_require__(96);
-
-	var _doubleEndedQueue2 = _interopRequireDefault(_doubleEndedQueue);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var dashboard = document.getElementById('dashboard'); /* global fetch */
-
-	var cache = {};
-	var lastUpdated = null;
-
-	var nextSiblings = function nextSiblings(el, predicate) {
-	  if (!el) throw new TypeError('Element must be defined');
-	  var result = [];
-	  while (el = el.nextElementSibling) {
-	    if (!predicate(el)) continue;
-	    result.push(el);
-	  }
-	  return result;
-	};
-
-	// Get all newsfeed DOM elements
-	var getFeedItems = function getFeedItems(startingFrom) {
-	  var _document;
-
-	  var allowed = ['watch_started', 'create', 'fork'];
-
-	  var predicate = function predicate(el) {
-	    return allowed.some(function (i) {
-	      return el.classList.contains(i);
-	    });
-	  };
-	  // If startingFrom is defined, function will look for the immediately
-	  // following sibling of this element
-	  var firstMatchedEl = startingFrom ? startingFrom : (_document = document).querySelector.apply(_document, (0, _toConsumableArray3.default)(allowed.map(function (i) {
-	    return '.' + i;
-	  })));
-
-	  return [firstMatchedEl].concat((0, _toConsumableArray3.default)(nextSiblings(firstMatchedEl, predicate)));
-	};
-
-	// Get user/repo pairs from the DOM nodes
-	var getUserRepo = function getUserRepo(el) {
-	  if (!el) return;
-	  return el.querySelector('.title').lastElementChild.innerText;
-	};
-
-	var getRepo = function () {
-	  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(userRepo) {
-	    var API, response;
+	var inject = function () {
+	  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+	    var nodes, repositories, data, nodeQueue, node, userRepo;
 	    return _regenerator2.default.wrap(function _callee$(_context) {
 	      while (1) {
 	        switch (_context.prev = _context.next) {
 	          case 0:
-	            API = 'https://api.github.com/repos/';
-	            _context.prev = 1;
-	            _context.next = 4;
-	            return fetch(API + userRepo);
-
-	          case 4:
-	            response = _context.sent;
-
-	            if (!(403 === response.status)) {
-	              _context.next = 7;
-	              break;
-	            }
-
-	            throw new Error('Unauthorized');
-
-	          case 7:
-	            if (!(404 === response.status)) {
-	              _context.next = 9;
-	              break;
-	            }
-
-	            throw new Error(userRepo + ' is not found');
-
-	          case 9:
-	            _context.next = 11;
-	            return response.json();
-
-	          case 11:
-	            return _context.abrupt('return', _context.sent);
-
-	          case 14:
-	            _context.prev = 14;
-	            _context.t0 = _context['catch'](1);
-
-	            console.error(_context.t0);
-
-	          case 17:
-	          case 'end':
-	            return _context.stop();
-	        }
-	      }
-	    }, _callee, undefined, [[1, 14]]);
-	  }));
-
-	  return function getRepo(_x) {
-	    return _ref.apply(this, arguments);
-	  };
-	}();
-
-	var getRepos = function () {
-	  var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(repositories, cache) {
-	    return _regenerator2.default.wrap(function _callee3$(_context3) {
-	      while (1) {
-	        switch (_context3.prev = _context3.next) {
-	          case 0:
-	            return _context3.abrupt('return', _promise2.default.all([].concat((0, _toConsumableArray3.default)(repositories)).map(function () {
-	              var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(userRepo) {
-	                var cashedValue;
-	                return _regenerator2.default.wrap(function _callee2$(_context2) {
-	                  while (1) {
-	                    switch (_context2.prev = _context2.next) {
-	                      case 0:
-	                        cashedValue = cache[userRepo];
-
-	                        if (!cashedValue) {
-	                          _context2.next = 5;
-	                          break;
-	                        }
-
-	                        _context2.t0 = cashedValue;
-	                        _context2.next = 8;
-	                        break;
-
-	                      case 5:
-	                        _context2.next = 7;
-	                        return getRepo(userRepo, cache);
-
-	                      case 7:
-	                        _context2.t0 = _context2.sent;
-
-	                      case 8:
-	                        return _context2.abrupt('return', _context2.t0);
-
-	                      case 9:
-	                      case 'end':
-	                        return _context2.stop();
-	                    }
-	                  }
-	                }, _callee2, undefined);
-	              }));
-
-	              return function (_x4) {
-	                return _ref3.apply(this, arguments);
-	              };
-	            }())));
-
-	          case 1:
-	          case 'end':
-	            return _context3.stop();
-	        }
-	      }
-	    }, _callee3, undefined);
-	  }));
-
-	  return function getRepos(_x2, _x3) {
-	    return _ref2.apply(this, arguments);
-	  };
-	}();
-
-	// Transform an array of data to an object: { userRepo: dataFromAPI }
-	var normalizeResponse = function normalizeResponse(response) {
-	  return response.reduce(function (prev, curr) {
-	    if (!curr) return prev;
-	    var full_name = curr.full_name;
-
-	    prev[full_name] = curr;
-	    return prev;
-	  }, {});
-	};
-
-	var updateNode = function updateNode(node, data) {
-	  if (!data) return;
-	  var description = document.createElement('p');
-	  description.innerText = data.description;
-	  node.appendChild(description);
-	};
-
-	var extend = function () {
-	  var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
-	    var nodes, repositories, data, nodeQueue, node, userRepo;
-	    return _regenerator2.default.wrap(function _callee4$(_context4) {
-	      while (1) {
-	        switch (_context4.prev = _context4.next) {
-	          case 0:
 	            // Cache DOM nodes
-	            nodes = getFeedItems(lastUpdated);
+	            nodes = (0, _dom.getFeedItems)(lastUpdated);
 
 	            if (nodes.length) {
-	              _context4.next = 3;
+	              _context.next = 3;
 	              break;
 	            }
 
-	            return _context4.abrupt('return');
+	            return _context.abrupt('return');
 
 	          case 3:
 	            // Initialize a Set of unique user/repo pairs
-	            repositories = new _set2.default(nodes.map(getUserRepo));
-	            _context4.next = 6;
-	            return getRepos(repositories, cache);
+	            repositories = new _set2.default(nodes.map(_dom.getUserRepo));
+	            _context.next = 6;
+	            return (0, _api.getRepos)(repositories, cache);
 
 	          case 6:
-	            data = _context4.sent;
+	            data = _context.sent;
 
 	            cache = (0, _extends3.default)({}, cache, normalizeResponse(data));
 	            // Initialize a queue of DOM nodes that are going to be updated
@@ -284,29 +95,55 @@
 
 	            while (!nodeQueue.isEmpty()) {
 	              node = lastUpdated = nodeQueue.shift();
-	              userRepo = getUserRepo(node);
+	              userRepo = (0, _dom.getUserRepo)(node);
 
-	              updateNode(node, cache[userRepo]);
+	              (0, _dom.updateNode)(node, cache[userRepo]);
 	            }
 
 	          case 10:
 	          case 'end':
-	            return _context4.stop();
+	            return _context.stop();
 	        }
 	      }
-	    }, _callee4, undefined);
+	    }, _callee, this);
 	  }));
 
-	  return function extend() {
-	    return _ref4.apply(this, arguments);
+	  return function inject() {
+	    return _ref.apply(this, arguments);
 	  };
 	}();
 
+	var _doubleEndedQueue = __webpack_require__(96);
+
+	var _doubleEndedQueue2 = _interopRequireDefault(_doubleEndedQueue);
+
+	var _api = __webpack_require__(97);
+
+	var _dom = __webpack_require__(99);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var dashboard = document.getElementById('dashboard'); /* global fetch */
+
+	var cache = {};
+	var lastUpdated = null;
+
+	// Transform an array of data to an object: { userRepo: dataFromAPI }
+	function normalizeResponse(response) {
+	  return response.reduce(function (prev, curr) {
+	    if (!curr) return prev;
+	    var full_name = curr.full_name;
+
+	    prev[full_name] = curr;
+	    return prev;
+	  }, {});
+	}
+
 	dashboard.addEventListener('submit', function () {
-	  setTimeout(extend, 500);
+	  setTimeout(inject, 500);
 	});
 
-	extend();
+	inject();
 
 /***/ },
 /* 1 */
@@ -3600,6 +3437,228 @@
 
 	module.exports = Deque;
 
+
+/***/ },
+/* 97 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getRepos = exports.getRepo = undefined;
+
+	var _toConsumableArray2 = __webpack_require__(95);
+
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+	var _promise = __webpack_require__(83);
+
+	var _promise2 = _interopRequireDefault(_promise);
+
+	var _regenerator = __webpack_require__(90);
+
+	var _regenerator2 = _interopRequireDefault(_regenerator);
+
+	var _asyncToGenerator2 = __webpack_require__(94);
+
+	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+	var getRepo = exports.getRepo = function () {
+	  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(userRepo) {
+	    var API, response;
+	    return _regenerator2.default.wrap(function _callee$(_context) {
+	      while (1) {
+	        switch (_context.prev = _context.next) {
+	          case 0:
+	            API = 'https://api.github.com/repos/';
+	            _context.prev = 1;
+	            _context.next = 4;
+	            return fetch(API + userRepo);
+
+	          case 4:
+	            response = _context.sent;
+
+	            if (!(403 === response.status)) {
+	              _context.next = 7;
+	              break;
+	            }
+
+	            throw new Error('Unauthorized');
+
+	          case 7:
+	            if (!(404 === response.status)) {
+	              _context.next = 9;
+	              break;
+	            }
+
+	            throw new Error(userRepo + ' is not found');
+
+	          case 9:
+	            _context.next = 11;
+	            return response.json();
+
+	          case 11:
+	            return _context.abrupt('return', _context.sent);
+
+	          case 14:
+	            _context.prev = 14;
+	            _context.t0 = _context['catch'](1);
+
+	            console.error(_context.t0);
+
+	          case 17:
+	          case 'end':
+	            return _context.stop();
+	        }
+	      }
+	    }, _callee, this, [[1, 14]]);
+	  }));
+
+	  return function getRepo(_x) {
+	    return _ref.apply(this, arguments);
+	  };
+	}();
+
+	var getRepos = exports.getRepos = function () {
+	  var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(repositories, cache) {
+	    var _this = this;
+
+	    return _regenerator2.default.wrap(function _callee3$(_context3) {
+	      while (1) {
+	        switch (_context3.prev = _context3.next) {
+	          case 0:
+	            return _context3.abrupt('return', _promise2.default.all([].concat((0, _toConsumableArray3.default)(repositories)).map(function () {
+	              var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(userRepo) {
+	                var cashedValue;
+	                return _regenerator2.default.wrap(function _callee2$(_context2) {
+	                  while (1) {
+	                    switch (_context2.prev = _context2.next) {
+	                      case 0:
+	                        cashedValue = cache[userRepo];
+
+	                        if (!cashedValue) {
+	                          _context2.next = 5;
+	                          break;
+	                        }
+
+	                        _context2.t0 = cashedValue;
+	                        _context2.next = 8;
+	                        break;
+
+	                      case 5:
+	                        _context2.next = 7;
+	                        return getRepo(userRepo, cache);
+
+	                      case 7:
+	                        _context2.t0 = _context2.sent;
+
+	                      case 8:
+	                        return _context2.abrupt('return', _context2.t0);
+
+	                      case 9:
+	                      case 'end':
+	                        return _context2.stop();
+	                    }
+	                  }
+	                }, _callee2, _this);
+	              }));
+
+	              return function (_x4) {
+	                return _ref3.apply(this, arguments);
+	              };
+	            }())));
+
+	          case 1:
+	          case 'end':
+	            return _context3.stop();
+	        }
+	      }
+	    }, _callee3, this);
+	  }));
+
+	  return function getRepos(_x2, _x3) {
+	    return _ref2.apply(this, arguments);
+	  };
+	}();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ },
+/* 98 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.nextSiblings = nextSiblings;
+	function nextSiblings(el, predicate) {
+	  if (!el) throw new TypeError('Element must be defined');
+	  var result = [];
+	  while (el = el.nextElementSibling) {
+	    if (!predicate(el)) continue;
+	    result.push(el);
+	  }
+	  return result;
+	}
+
+/***/ },
+/* 99 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _toConsumableArray2 = __webpack_require__(95);
+
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+	exports.getUserRepo = getUserRepo;
+	exports.getFeedItems = getFeedItems;
+	exports.updateNode = updateNode;
+
+	var _utils = __webpack_require__(98);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// Get user/repo pairs from the DOM nodes
+	function getUserRepo(el) {
+	  if (!el) return;
+	  return el.querySelector('.title').lastElementChild.innerText;
+	}
+
+	// Get all newsfeed DOM elements
+	function getFeedItems(startingFrom) {
+	  var _document;
+
+	  var allowed = ['watch_started', 'create', 'fork'];
+
+	  var predicate = function predicate(el) {
+	    return allowed.some(function (i) {
+	      return el.classList.contains(i);
+	    });
+	  };
+	  // If startingFrom is defined, function will look for the immediately
+	  // following sibling of this element
+	  var firstMatchedEl = startingFrom ? startingFrom : (_document = document).querySelector.apply(_document, (0, _toConsumableArray3.default)(allowed.map(function (i) {
+	    return '.' + i;
+	  })));
+
+	  return [firstMatchedEl].concat((0, _toConsumableArray3.default)((0, _utils.nextSiblings)(firstMatchedEl, predicate)));
+	}
+
+	function updateNode(node, data) {
+	  if (!data) return;
+	  var description = document.createElement('p');
+	  description.innerText = data.description;
+	  node.appendChild(description);
+	}
 
 /***/ }
 /******/ ]);

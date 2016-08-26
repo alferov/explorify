@@ -1,61 +1,14 @@
 /* global fetch */
 import Deque from 'double-ended-queue'
+import { getRepo, getRepos } from './api'
+import { getUserRepo, getFeedItems, updateNode } from './dom'
+
 const dashboard = document.getElementById('dashboard')
 let cache = {}
 let lastUpdated = null
 
-const nextSiblings = (el, predicate) => {
-  if (!el) throw new TypeError('Element must be defined')
-  const result = []
-  while (el = el.nextElementSibling) {
-    if (!predicate(el)) continue
-    result.push(el)
-  }
-  return result
-}
-
-// Get all newsfeed DOM elements
-const getFeedItems = (startingFrom) => {
-  const allowed = ['watch_started', 'create', 'fork']
-
-  const predicate = (el) => allowed.some((i) => el.classList.contains(i))
-  // If startingFrom is defined, function will look for the immediately
-  // following sibling of this element
-  const firstMatchedEl = startingFrom
-    ? startingFrom
-    : document.querySelector(...allowed.map((i) => `.${i}`))
-
-  return [firstMatchedEl, ...nextSiblings(firstMatchedEl, predicate)]
-}
-
-// Get user/repo pairs from the DOM nodes
-const getUserRepo = (el) => {
-  if (!el) return
-  return el.querySelector('.title').lastElementChild.innerText
-}
-
-const getRepo = async (userRepo) => {
-  const API = 'https://api.github.com/repos/'
-  try {
-    const response = await fetch(API + userRepo)
-    if (403 === response.status) throw new Error('Unauthorized')
-    if (404 === response.status) throw new Error(`${userRepo} is not found`)
-    return await response.json()
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-const getRepos = async (repositories, cache) => {
-  // Run async requests in parallel
-  return Promise.all([...repositories].map(async (userRepo) => {
-    const cashedValue = cache[userRepo]
-    return cashedValue ? cashedValue : await getRepo(userRepo, cache)
-  }))
-}
-
 // Transform an array of data to an object: { userRepo: dataFromAPI }
-const normalizeResponse = (response) => {
+function normalizeResponse (response) {
   return response.reduce((prev, curr)=> {
     if (!curr) return prev
     const { full_name } = curr
@@ -64,14 +17,7 @@ const normalizeResponse = (response) => {
   }, {})
 }
 
-const updateNode = (node, data) => {
-  if (!data) return
-  const description = document.createElement('p')
-  description.innerText = data.description
-  node.appendChild(description)
-}
-
-const extend = async () => {
+async function inject () {
   // Cache DOM nodes
   const nodes = getFeedItems(lastUpdated)
   if (!nodes.length) return
@@ -91,7 +37,7 @@ const extend = async () => {
 
 dashboard
   .addEventListener('submit', () => {
-    setTimeout(extend, 500)
+    setTimeout(inject, 500)
   })
 
-extend()
+inject()
