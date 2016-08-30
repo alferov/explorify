@@ -3630,13 +3630,14 @@
 	      return el.classList.contains(i);
 	    });
 	  };
-	  // If startingFrom is defined, function will look for the immediately
-	  // following sibling of this element
+	  // If startingFrom is defined, the function will look for the immediately
+	  // following sibling of this element. Otherwise, it will take the very first
+	  // matching element on the page
 	  var firstMatchedEl = startingFrom ? startingFrom : (_document = document).querySelector.apply(_document, (0, _toConsumableArray3.default)(allowed.map(function (i) {
 	    return '.' + i;
 	  })));
 
-	  return [firstMatchedEl].concat((0, _toConsumableArray3.default)((0, _utils.nextSiblings)(firstMatchedEl, predicate)));
+	  return startingFrom ? [].concat((0, _toConsumableArray3.default)((0, _utils.nextSiblings)(firstMatchedEl, predicate))) : [firstMatchedEl].concat((0, _toConsumableArray3.default)((0, _utils.nextSiblings)(firstMatchedEl, predicate)));
 	}
 
 	function updateNode(node, data) {
