@@ -1,5 +1,5 @@
 import Deque from 'double-ended-queue'
-import { getRepo, getRepos } from './api'
+import { getRepos } from './api'
 import { getUserRepo, getFeedItems, updateNode } from './dom'
 const dashboard = document.getElementById('dashboard')
 let cache = {}

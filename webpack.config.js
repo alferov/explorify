@@ -5,6 +5,11 @@ module.exports = {
     filename: 'github-showcasify.js'
   },
   module: {
+    preLoaders: [{
+      test: /\.js$/,
+      loader: "eslint-loader",
+      exclude: /node_modules/
+    }],
     loaders: [{
       loader: 'babel-loader',
       test: /\.js$/,
@@ -17,5 +22,8 @@ module.exports = {
         ]
       }
     }]
+  },
+  eslint: {
+    configFile: './.eslintrc'
   }
 }
