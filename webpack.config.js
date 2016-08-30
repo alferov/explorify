@@ -2,7 +2,7 @@ module.exports = {
   entry: __dirname + '/src/index.js',
   output: {
     path: __dirname + '/dist',
-    filename: 'github-showcasify.js'
+    filename: 'showcasify.js'
   },
   module: {
     preLoaders: [{

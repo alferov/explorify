@@ -1,9 +1,9 @@
 {
-  "name": "Github Showcasify",
+  "name": "Showcasify",
   "version": "1.0.0",
   "manifest_version": 2,
-  "description": "Adds the description and the number of stars to starred repositories in the GitHub News Feed",
-  "homepage_url": "https://github.com/alferov/github-showcasify",
+  "description": "Adds the description and the number of stars to starred, newly created, and forked repositories in the GitHub News Feed",
+  "homepage_url": "https://github.com/alferov/showcasify",
   "author": "Philipp Alferov",
   "permissions": [
     "http://github.com/*",
@@ -16,7 +16,7 @@
         "https://github.com/*"
       ],
       "js": [
-        "dist/github-showcasify.js"
+        "dist/showcasify.js"
       ],
       "run_at": "document_end"
     }
