@@ -3373,6 +3373,8 @@
 
 	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
+	/* eslint no-console: "off" */
+
 	var getRepo = exports.getRepo = function () {
 	  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(userRepo) {
 	    var API, response;
@@ -3657,7 +3659,7 @@
 	function nextSiblings(el, predicate) {
 	  if (!el) throw new TypeError('Element must be defined');
 	  var result = [];
-	  while (el = el.nextElementSibling) {
+	  while ((el = el.nextElementSibling) !== null) {
 	    if (!predicate(el)) continue;
 	    result.push(el);
 	  }

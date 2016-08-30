@@ -7,7 +7,7 @@ let lastUpdated = null
 
 // Transform an array of data to an object: { userRepo: dataFromAPI }
 function normalizeResponse (response) {
-  return response.reduce((prev, curr)=> {
+  return response.reduce((prev, curr) => {
     if (!curr) return prev
     const { full_name } = curr
     prev[full_name] = curr

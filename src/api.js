@@ -1,3 +1,5 @@
+/* eslint no-console: "off" */
+
 export async function getRepo (userRepo) {
   const API = 'https://api.github.com/repos/'
   try {
