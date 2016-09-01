@@ -7,3 +7,7 @@ export function nextSiblings (el, predicate) {
   }
   return result
 }
+
+export function getStartCount (numberOfStars) {
+  return `${numberOfStars} ${numberOfStars === 1 ? 'star' : 'stars'}`
+}

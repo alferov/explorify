@@ -3642,9 +3642,19 @@
 
 	function updateNode(node, data) {
 	  if (!data) return;
+	  var descriptionStyles = 'repo-list-description';
+	  var metaStyles = 'repo-list-meta';
+	  var wrapper = document.createDocumentFragment();
 	  var description = document.createElement('p');
+	  var meta = document.createElement('p');
+	  var metaData = [data.language, (0, _utils.getStartCount)(data.stargazers_count)];
 	  description.innerText = data.description;
-	  node.appendChild(description);
+	  description.classList.add(descriptionStyles);
+
+	  meta.innerHTML = '' + metaData.join(' • ');
+	  meta.classList.add(metaStyles);
+	  wrapper.appendChild(description).appendChild(meta);
+	  node.appendChild(wrapper);
 	}
 
 /***/ },
@@ -3657,6 +3667,7 @@
 	  value: true
 	});
 	exports.nextSiblings = nextSiblings;
+	exports.getStartCount = getStartCount;
 	function nextSiblings(el, predicate) {
 	  if (!el) throw new TypeError('Element must be defined');
 	  var result = [];
@@ -3665,6 +3676,10 @@
 	    result.push(el);
 	  }
 	  return result;
+	}
+
+	function getStartCount(numberOfStars) {
+	  return numberOfStars + ' ' + (numberOfStars === 1 ? 'star' : 'stars');
 	}
 
 /***/ }
