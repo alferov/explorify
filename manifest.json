@@ -1,9 +1,9 @@
 {
-  "name": "Showcasify",
+  "name": "Explorify",
   "version": "1.0.0",
   "manifest_version": 2,
-  "description": "Adds the description and the number of stars to starred, newly created, and forked repositories in the GitHub News Feed",
-  "homepage_url": "https://github.com/alferov/showcasify",
+  "description": "A Chrome extension that adds a quick overview to repositories in your Github News Feed",
+  "homepage_url": "https://github.com/alferov/explorify",
   "author": "Philipp Alferov",
   "permissions": [
     "http://github.com/*",
@@ -16,7 +16,7 @@
         "https://github.com/*"
       ],
       "js": [
-        "dist/showcasify.js"
+        "dist/explorify.js"
       ],
       "run_at": "document_end"
     }
