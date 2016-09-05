@@ -3642,19 +3642,22 @@
 
 	function updateNode(node, data) {
 	  if (!data) return;
+	  var language = data.language;
+	  var description = data.description;
+
 	  var descriptionStyles = 'repo-list-description';
 	  var metaStyles = 'repo-list-meta';
-	  var wrapper = document.createDocumentFragment();
-	  var description = document.createElement('p');
-	  var meta = document.createElement('p');
-	  var metaData = [data.language, (0, _utils.getStartCount)(data.stargazers_count)];
-	  description.innerText = data.description;
-	  description.classList.add(descriptionStyles);
+	  var containerEl = document.createDocumentFragment();
+	  var descEl = document.createElement('p');
+	  var metaEl = document.createElement('p');
+	  var metaData = [language || '&ndash;', (0, _utils.getStartCount)(data.stargazers_count)];
+	  descEl.innerHTML = description || '<i>No description or website provided.<i>';
+	  descEl.classList.add(descriptionStyles);
 
-	  meta.innerHTML = '' + metaData.join(' • ');
-	  meta.classList.add(metaStyles);
-	  wrapper.appendChild(description).appendChild(meta);
-	  node.appendChild(wrapper);
+	  metaEl.innerHTML = '' + (0, _utils.getDescMeta)(metaData);
+	  metaEl.classList.add(metaStyles);
+	  containerEl.appendChild(descEl).appendChild(metaEl);
+	  node.appendChild(containerEl);
 	}
 
 /***/ },
@@ -3668,6 +3671,7 @@
 	});
 	exports.nextSiblings = nextSiblings;
 	exports.getStartCount = getStartCount;
+	exports.getDescMeta = getDescMeta;
 	function nextSiblings(el, predicate) {
 	  if (!el) throw new TypeError('Element must be defined');
 	  var result = [];
@@ -3678,8 +3682,16 @@
 	  return result;
 	}
 
-	function getStartCount(numberOfStars) {
+	function getStartCount() {
+	  var numberOfStars = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
 	  return numberOfStars + ' ' + (numberOfStars === 1 ? 'star' : 'stars');
+	}
+
+	function getDescMeta() {
+	  var meta = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+
+	  return meta.filter(Boolean).join(' • ');
 	}
 
 /***/ }

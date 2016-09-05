@@ -1,4 +1,4 @@
-import { nextSiblings, getStartCount } from './utils'
+import { nextSiblings, getStartCount, getDescMeta } from './utils'
 
 // Get user/repo pairs from the DOM nodes
 export function getUserRepo (el) {
@@ -25,20 +25,21 @@ export function getFeedItems (startingFrom) {
 
 export function updateNode (node, data) {
   if (!data) return
+  const { language, description } = data
   const descriptionStyles = 'repo-list-description'
   const metaStyles = 'repo-list-meta'
-  const wrapper = document.createDocumentFragment()
-  const description = document.createElement('p')
-  const meta = document.createElement('p')
+  const containerEl = document.createDocumentFragment()
+  const descEl = document.createElement('p')
+  const metaEl = document.createElement('p')
   const metaData = [
-    data.language,
+    language || '&ndash;',
     getStartCount(data.stargazers_count)
   ]
-  description.innerText = data.description
-  description.classList.add(descriptionStyles)
+  descEl.innerHTML = description || '<i>No description or website provided.<i>'
+  descEl.classList.add(descriptionStyles)
 
-  meta.innerHTML = `${metaData.join(' • ')}`
-  meta.classList.add(metaStyles)
-  wrapper.appendChild(description).appendChild(meta)
-  node.appendChild(wrapper)
+  metaEl.innerHTML = `${getDescMeta(metaData)}`
+  metaEl.classList.add(metaStyles)
+  containerEl.appendChild(descEl).appendChild(metaEl)
+  node.appendChild(containerEl)
 }

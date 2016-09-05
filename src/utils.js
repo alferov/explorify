@@ -8,6 +8,10 @@ export function nextSiblings (el, predicate) {
   return result
 }
 
-export function getStartCount (numberOfStars) {
+export function getStartCount (numberOfStars = 0) {
   return `${numberOfStars} ${numberOfStars === 1 ? 'star' : 'stars'}`
+}
+
+export function getDescMeta (meta = []) {
+  return meta.filter(Boolean).join(' • ')
 }

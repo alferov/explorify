@@ -2,7 +2,7 @@
   "name": "Explorify",
   "version": "1.0.0",
   "manifest_version": 2,
-  "description": "A Chrome extension that adds a quick overview to repositories in your Github News Feed",
+  "description": "A Chrome extension that adds a quick overview of repositories to your Github News Feed",
   "homepage_url": "https://github.com/alferov/explorify",
   "author": "Philipp Alferov",
   "permissions": [

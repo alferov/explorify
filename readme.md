@@ -1,5 +1,5 @@
 # Explorify
-> A Chrome extension that adds a quick overview to repositories in your Github News Feed
+> A Chrome extension that adds a quick overview of repositories to your Github News Feed
 
 ![explorify](media/screen.png)
 
