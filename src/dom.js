@@ -1,5 +1,5 @@
 import { nextSiblings, getStartCount, getDescMeta } from './utils'
-
+import { load, parse } from 'gh-emoji'
 // Get user/repo pairs from the DOM nodes
 export function getUserRepo (el) {
   if (!el) return
@@ -23,23 +23,39 @@ export function getFeedItems (startingFrom) {
     : [firstMatchedEl, ...nextSiblings(firstMatchedEl, predicate)]
 }
 
+export function setEmojiSize (emojis) {
+  if (!emojis.length) return;
+  for (let emoji of emojis) {
+    emoji.style.maxWidth = '100%';
+    emoji.style.height = '21px';
+  }
+}
+
 export function updateNode (node, data) {
   if (!data) return
   const { language, description } = data
-  const descriptionStyles = 'repo-list-description'
-  const metaStyles = 'repo-list-meta'
+  const descElStyles = 'repo-list-description'
+  const metaElStyles = 'repo-list-meta'
   const containerEl = document.createDocumentFragment()
   const descEl = document.createElement('p')
   const metaEl = document.createElement('p')
-  const metaData = [
+  const metaElData = [
     language || '&ndash;',
     getStartCount(data.stargazers_count)
   ]
-  descEl.innerHTML = description || '<i>No description or website provided.<i>'
-  descEl.classList.add(descriptionStyles)
 
-  metaEl.innerHTML = `${getDescMeta(metaData)}`
-  metaEl.classList.add(metaStyles)
-  containerEl.appendChild(descEl).appendChild(metaEl)
-  node.appendChild(containerEl)
+  load()
+    .then(() => {
+      descEl.innerHTML = parse(description)
+        || '<i>No description or website provided.<i>'
+      return descEl.getElementsByTagName('img');
+    })
+    .then(setEmojiSize)
+    .finally(() => {
+      descEl.classList.add(descElStyles)
+      metaEl.innerHTML = `${getDescMeta(metaElData)}`
+      metaEl.classList.add(metaElStyles)
+      containerEl.appendChild(descEl).appendChild(metaEl)
+      node.appendChild(containerEl)
+    });
 }

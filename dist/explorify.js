@@ -3601,15 +3601,22 @@
 	  value: true
 	});
 
+	var _getIterator2 = __webpack_require__(99);
+
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+
 	var _toConsumableArray2 = __webpack_require__(93);
 
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
 	exports.getUserRepo = getUserRepo;
 	exports.getFeedItems = getFeedItems;
+	exports.setEmojiSize = setEmojiSize;
 	exports.updateNode = updateNode;
 
-	var _utils = __webpack_require__(99);
+	var _utils = __webpack_require__(102);
+
+	var _ghEmoji = __webpack_require__(103);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3640,28 +3647,87 @@
 	  return startingFrom ? [].concat((0, _toConsumableArray3.default)((0, _utils.nextSiblings)(firstMatchedEl, predicate))) : [firstMatchedEl].concat((0, _toConsumableArray3.default)((0, _utils.nextSiblings)(firstMatchedEl, predicate)));
 	}
 
+	function setEmojiSize(emojis) {
+	  if (!emojis.length) return;
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+
+	  try {
+	    for (var _iterator = (0, _getIterator3.default)(emojis), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      var emoji = _step.value;
+
+	      emoji.style.maxWidth = '100%';
+	      emoji.style.height = '21px';
+	    }
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator.return) {
+	        _iterator.return();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
+	  }
+	}
+
 	function updateNode(node, data) {
 	  if (!data) return;
 	  var language = data.language;
 	  var description = data.description;
 
-	  var descriptionStyles = 'repo-list-description';
-	  var metaStyles = 'repo-list-meta';
+	  var descElStyles = 'repo-list-description';
+	  var metaElStyles = 'repo-list-meta';
 	  var containerEl = document.createDocumentFragment();
 	  var descEl = document.createElement('p');
 	  var metaEl = document.createElement('p');
-	  var metaData = [language || '&ndash;', (0, _utils.getStartCount)(data.stargazers_count)];
-	  descEl.innerHTML = description || '<i>No description or website provided.<i>';
-	  descEl.classList.add(descriptionStyles);
+	  var metaElData = [language || '&ndash;', (0, _utils.getStartCount)(data.stargazers_count)];
 
-	  metaEl.innerHTML = '' + (0, _utils.getDescMeta)(metaData);
-	  metaEl.classList.add(metaStyles);
-	  containerEl.appendChild(descEl).appendChild(metaEl);
-	  node.appendChild(containerEl);
+	  (0, _ghEmoji.load)().then(function () {
+	    descEl.innerHTML = (0, _ghEmoji.parse)(description) || '<i>No description or website provided.<i>';
+	    return descEl.getElementsByTagName('img');
+	  }).then(setEmojiSize).finally(function () {
+	    descEl.classList.add(descElStyles);
+	    metaEl.innerHTML = '' + (0, _utils.getDescMeta)(metaElData);
+	    metaEl.classList.add(metaElStyles);
+	    containerEl.appendChild(descEl).appendChild(metaEl);
+	    node.appendChild(containerEl);
+	  });
 	}
 
 /***/ },
 /* 99 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(100), __esModule: true };
+
+/***/ },
+/* 100 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(59);
+	__webpack_require__(46);
+	module.exports = __webpack_require__(101);
+
+/***/ },
+/* 101 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var anObject = __webpack_require__(16)
+	  , get      = __webpack_require__(70);
+	module.exports = __webpack_require__(11).getIterator = function(it){
+	  var iterFn = get(it);
+	  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
+	  return anObject(iterFn.call(it));
+	};
+
+/***/ },
+/* 102 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3693,6 +3759,246 @@
 
 	  return meta.filter(Boolean).join(' • ');
 	}
+
+/***/ },
+/* 103 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
+	  if (true) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof exports !== "undefined") {
+	    factory();
+	  } else {
+	    var mod = {
+	      exports: {}
+	    };
+	    factory();
+	    global.types = mod.exports;
+	  }
+	})(this, function () {});
+	(function (global, factory) {
+	  if (true) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof exports !== "undefined") {
+	    factory(exports);
+	  } else {
+	    var mod = {
+	      exports: {}
+	    };
+	    factory(mod.exports);
+	    global.index = mod.exports;
+	  }
+	})(this, function (exports) {
+	  'use strict';
+
+	  Object.defineProperty(exports, "__esModule", {
+	    value: true
+	  });
+	  exports.find = find;
+	  exports.load = load;
+	  exports.all = all;
+	  exports.exist = exist;
+	  exports.getUrl = getUrl;
+	  exports.parse = parse;
+
+	  function _toConsumableArray(arr) {
+	    if (Array.isArray(arr)) {
+	      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+	        arr2[i] = arr[i];
+	      }
+
+	      return arr2;
+	    } else {
+	      return Array.from(arr);
+	    }
+	  }
+
+	  var enpoint = 'https://api.github.com/emojis';
+	  var delimiterRegex = /(\:[\w\-\+]+\:)/g;
+	  var emojis = null;
+
+	  var fetch = window.fetch || function (endpoint) {
+	    return new Promise(function (resolve, reject) {
+	      var xhr = new XMLHttpRequest();
+
+	      xhr.onreadystatechange = function () {
+	        if (xhr.readyState === XMLHttpRequest.DONE) {
+	          if (xhr.status !== 200) {
+	            return reject(xhr.responseText);
+	          }
+
+	          return resolve({ json: function json() {
+	              return JSON.parse(xhr.responseText);
+	            } });
+	        }
+	      };
+
+	      xhr.open('GET', endpoint, true);
+	      xhr.send();
+	    });
+	  };
+
+	  /**
+	   * Return array with matched emojis in text.
+	   *
+	   * @example
+	   * import { load as loadEmojis, find as findEmojis } from 'gh-emoji';
+	   *
+	   * const text = 'Do you believe in :alien:...? :scream:';
+	   *
+	   * loadEmojis().then((emojis) => {
+	   *   console.log(findEmojis(text)); // [':alien:', ':scream:']
+	   * });
+	   *
+	   * @param {String} text Text to search for emojis.
+	   *
+	   * @returns {Array<String>} Array with matched emojis.
+	   */
+	  function find(text) {
+	    return text.match(delimiterRegex) || [];
+	  }
+
+	  /**
+	   * Fetch the emoji data from Github's api.
+	   *
+	   * @example
+	   * import { load as loadEmojis } from 'gh-emoji';
+	   *
+	   * loadEmojis().then((emojis) => {
+	   *   console.log(emojis['+1']); // 👍
+	   * });
+	   *
+	   * @returns {Promise<Object>} Promise which passes Object with emoji names
+	   * as keys and generated image tags as values to callback.
+	   */
+	  function load() {
+	    return new Promise(function (resolve) {
+	      if (emojis) return resolve(emojis);
+
+	      return fetch(enpoint).then(function (r) {
+	        return r.json();
+	      }).then(function (response) {
+	        emojis = response;
+	        resolve(emojis);
+	      });
+	    });
+	  }
+
+	  /**
+	   * Return all fetched emojis.
+	   *
+	   * @example
+	   * import { load as loadEmojis, all as allEmojis } from 'gh-emoji';
+	   *
+	   * loadEmojis().then(() => {
+	   *   console.log(allEmojis()); // {emojiName: emojiImageTag}
+	   * });
+	   *
+	   * @returns {Object} Object with emoji names as keys and generated image tags
+	   * as values.
+	   */
+	  function all() {
+	    return emojis;
+	  }
+
+	  /**
+	   * Check if requested emoji exists.
+	   *
+	   * @example
+	   * import { load as loadEmojis, exist as emojiExists } from 'gh-emoji';
+	   *
+	   * loadEmojis().then(() => {
+	   *   console.log(emojiExists('foo')); // false
+	   *   console.log(emojiExists('smile')); // true
+	   * });
+	   *
+	   * @param {String} emojiId Name of emoji.
+	   *
+	   * @returns {Boolean}
+	   */
+	  function exist(emojiId) {
+	    var emojiMap = all();
+
+	    if (emojiMap == null) {
+	      return false;
+	    }
+
+	    return !!emojiMap[emojiId];
+	  }
+
+	  /**
+	   * Return github's image url of emoji.
+	   *
+	   * @example
+	   * import { load as loadEmojis, getUrl } from 'gh-emoji';
+	   *
+	   * loadEmojis().then(() => {
+	   *   console.log(getUrl('apple')); // 'https://assets-cdn.github.com/images/icons/emoji/unicode/1f34e.png?v6'
+	   * });
+	   *
+	   * @param {String} emojiId Name of emoji.
+	   *
+	   * @returns {String} Image url of given emoji.
+	   */
+	  function getUrl(emojiId) {
+	    var emojiMap = all();
+
+	    if (emojiMap == null) {
+	      return null;
+	    }
+
+	    return emojiMap[emojiId];
+	  }
+
+	  /**
+	   * Parse text and replace emoji tags with actual emoji symbols.
+	   *
+	   * @example
+	   * import { load as loadEmojis, parse } from 'gh-emoji';
+	   *
+	   * const text = 'Do you believe in :alien:...? :scream:';
+	   *
+	   * loadEmojis().then(() => {
+	   *   console.log(parse(text)) // 'Do you believe in 👽...? 😱';
+	   * });
+	   *
+	   * @param {String} text Text to parse.
+	   * @param {Object} options Options with additional data for parser.
+	   * @param {String} options.classNames String with custom class names
+	   * added to each emoji, separated with whitespace.
+	   *
+	   * @returns {String} Parsed text with emoji image tags in it.
+	   */
+	  function parse(text) {
+	    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    var output = '';
+	    var customClassNames = options.classNames ? options.classNames.trim().split(/\s+/) : '';
+
+	    output += text.replace(delimiterRegex, function (match) {
+	      var name = match.replace(/:/g, '');
+	      var classNames = ['gh-emoji', 'gh-emoji-' + name];
+
+	      if (!exist(name)) {
+	        return match;
+	      }
+
+	      if (customClassNames) {
+	        classNames.push.apply(classNames, _toConsumableArray(customClassNames));
+	      }
+
+	      var imageSrc = getUrl(name);
+	      var imageClass = classNames.join(' ');
+	      var imageAlt = name;
+
+	      return '<img src="' + imageSrc + '" class="' + imageClass + '" alt="' + imageAlt + '" />';
+	    });
+
+	    return output;
+	  }
+	});
+
 
 /***/ }
 /******/ ]);
