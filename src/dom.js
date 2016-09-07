@@ -51,7 +51,7 @@ export function updateNode (node, data) {
       return descEl.getElementsByTagName('img');
     })
     .then(setEmojiSize)
-    .finally(() => {
+    .then(() => {
       descEl.classList.add(descElStyles)
       metaEl.innerHTML = `${getDescMeta(metaElData)}`
       metaEl.classList.add(metaElStyles)

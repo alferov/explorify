@@ -3691,7 +3691,7 @@
 	  (0, _ghEmoji.load)().then(function () {
 	    descEl.innerHTML = (0, _ghEmoji.parse)(description) || '<i>No description or website provided.<i>';
 	    return descEl.getElementsByTagName('img');
-	  }).then(setEmojiSize).finally(function () {
+	  }).then(setEmojiSize).then(function () {
 	    descEl.classList.add(descElStyles);
 	    metaEl.innerHTML = '' + (0, _utils.getDescMeta)(metaElData);
 	    metaEl.classList.add(metaElStyles);
