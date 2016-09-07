@@ -24,10 +24,10 @@ export function getFeedItems (startingFrom) {
 }
 
 export function setEmojiSize (emojis) {
-  if (!emojis.length) return;
+  if (!emojis.length) return
   for (let emoji of emojis) {
-    emoji.style.maxWidth = '100%';
-    emoji.style.height = '21px';
+    emoji.style.maxWidth = '100%'
+    emoji.style.height = '21px'
   }
 }
 
@@ -48,7 +48,7 @@ export function updateNode (node, data) {
     .then(() => {
       descEl.innerHTML = parse(description)
         || '<i>No description or website provided.<i>'
-      return descEl.getElementsByTagName('img');
+      return descEl.getElementsByTagName('img')
     })
     .then(setEmojiSize)
     .then(() => {
@@ -57,5 +57,5 @@ export function updateNode (node, data) {
       metaEl.classList.add(metaElStyles)
       containerEl.appendChild(descEl).appendChild(metaEl)
       node.appendChild(containerEl)
-    });
+    })
 }

@@ -12,5 +12,8 @@
   },
   "globals": {
     "fetch": true
+  },
+  "rules": {
+    semi: ["error", "never"]
   }
 }
